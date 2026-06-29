@@ -1,0 +1,57 @@
+all:
+  vars:
+    # The generated inventory is assumed to be used from the clab host.
+    # Hence no http proxy should be used. Therefore we make sure the http
+    # module does not attempt using any global http proxy.
+    ansible_httpapi_use_proxy: false
+  children:
+    linux:
+      hosts:
+        clab-hn-5gc-bench-amf-a1:
+          ansible_host: 10.100.200.20
+        clab-hn-5gc-bench-amf-a2:
+          ansible_host: 10.100.200.21
+        clab-hn-5gc-bench-amf-b1:
+          ansible_host: 10.100.200.22
+        clab-hn-5gc-bench-amf-b2:
+          ansible_host: 10.100.200.23
+        clab-hn-5gc-bench-amf-c1:
+          ansible_host: 10.100.200.24
+        clab-hn-5gc-bench-ausf:
+          ansible_host: 10.100.200.15
+        clab-hn-5gc-bench-bsf:
+          ansible_host: 10.100.200.17
+        clab-hn-5gc-bench-nef:
+          ansible_host: 10.100.200.12
+        clab-hn-5gc-bench-nrf:
+          ansible_host: 10.100.200.10
+        clab-hn-5gc-bench-nssf:
+          ansible_host: 10.100.200.11
+        clab-hn-5gc-bench-pcf:
+          ansible_host: 10.100.200.16
+        clab-hn-5gc-bench-prometheus:
+          ansible_host: 10.100.200.2
+        clab-hn-5gc-bench-smf-e1:
+          ansible_host: 10.100.200.50
+        clab-hn-5gc-bench-smf-e2:
+          ansible_host: 10.100.200.51
+        clab-hn-5gc-bench-smf-m1:
+          ansible_host: 10.100.200.54
+        clab-hn-5gc-bench-smf-u1:
+          ansible_host: 10.100.200.52
+        clab-hn-5gc-bench-smf-u2:
+          ansible_host: 10.100.200.53
+        clab-hn-5gc-bench-udm:
+          ansible_host: 10.100.200.14
+        clab-hn-5gc-bench-udr:
+          ansible_host: 10.100.200.13
+        clab-hn-5gc-bench-upf-e1:
+          ansible_host: 10.100.200.40
+        clab-hn-5gc-bench-upf-e2:
+          ansible_host: 10.100.200.41
+        clab-hn-5gc-bench-upf-m1:
+          ansible_host: 10.100.200.44
+        clab-hn-5gc-bench-upf-u1:
+          ansible_host: 10.100.200.42
+        clab-hn-5gc-bench-upf-u2:
+          ansible_host: 10.100.200.43
