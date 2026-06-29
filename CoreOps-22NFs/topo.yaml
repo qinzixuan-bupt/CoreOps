@@ -1,0 +1,177 @@
+name: hn-5gc-bench
+
+mgmt:
+  network: hn-5gc-bench-net
+  ipv4-subnet: 10.100.200.0/24
+
+topology:
+  nodes:
+    # ── 基础设施 ──
+    prometheus:
+      kind: linux
+      image: prom/prometheus:latest
+      mgmt-ipv4: 10.100.200.2
+      binds: 
+        - "./config/prometheus.yml:/etc/prometheus/prometheus.yml"
+        - "/etc/localtime:/etc/localtime:ro"
+      ports:
+        - "9091:9090"
+
+    # ── 核心注册与数据层 (10.100.200.10 - 19) ──
+    nrf:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.10
+      binds: ["./config/nrf.yaml:/etc/open5gs/nrf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-nrfd"
+
+    nssf:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.11
+      binds: ["./config/nssf.yaml:/etc/open5gs/nssf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-nssfd"
+
+    nef:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.12
+      binds: ["./config/bsf.yaml:/etc/open5gs/nef.yaml", "/etc/localtime:/etc/localtime:ro"] # 注意：这里你原文件映射的是bsf.yaml，如果是笔误请修改
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-bsfd"
+
+    udr:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.13
+      binds: ["./config/udr.yaml:/etc/open5gs/udr.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-udrd"
+
+    udm:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.14
+      binds: ["./config/udm.yaml:/etc/open5gs/udm.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-udmd"
+
+    ausf:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.15
+      binds: ["./config/ausf.yaml:/etc/open5gs/ausf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-ausfd"
+
+    pcf:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.16
+      binds: ["./config/pcf.yaml:/etc/open5gs/pcf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-pcfd"
+
+    bsf:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.17
+      binds: ["./config/bsf.yaml:/etc/open5gs/bsf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-bsfd"
+
+    # ── AMF 接入层 (10.100.200.20 - 29) ──
+    amf-a1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.20
+      binds: ["./config/amf-a1.yaml:/etc/open5gs/amf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-amfd"
+    amf-a2:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.21
+      binds: ["./config/amf-a2.yaml:/etc/open5gs/amf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-amfd"
+
+    amf-b1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.22
+      binds: ["./config/amf-b1.yaml:/etc/open5gs/amf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-amfd"
+    amf-b2:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.23
+      binds: ["./config/amf-b2.yaml:/etc/open5gs/amf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-amfd"
+
+    amf-c1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.24
+      binds: ["./config/amf-c1.yaml:/etc/open5gs/amf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-amfd"
+
+    # ── SMF 会话管理 (10.100.200.30 - 39) ──
+    smf-e1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.50
+      binds: ["./config/smf-e1.yaml:/etc/open5gs/smf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-smfd"
+    smf-e2:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.51
+      binds: ["./config/smf-e2.yaml:/etc/open5gs/smf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-smfd"
+
+    smf-u1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.52
+      binds: ["./config/smf-u1.yaml:/etc/open5gs/smf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-smfd"
+    smf-u2:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.53
+      binds: ["./config/smf-u2.yaml:/etc/open5gs/smf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-smfd"
+
+    smf-m1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.54
+      binds: ["./config/smf-m1.yaml:/etc/open5gs/smf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-smfd"
+
+    # ── UPF 用户面 (10.100.200.40 - 49) ──
+    upf-e1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.40
+      binds: ["./config/upf-e1.yaml:/etc/open5gs/upf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-upfd"
+    upf-e2:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.41
+      binds: ["./config/upf-e2.yaml:/etc/open5gs/upf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-upfd"
+
+    upf-u1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.42
+      binds: ["./config/upf-u1.yaml:/etc/open5gs/upf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-upfd"
+    upf-u2:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.43
+      binds: ["./config/upf-u2.yaml:/etc/open5gs/upf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-upfd"
+
+    upf-m1:
+      kind: linux
+      image: my-pure-open5gs:v1
+      mgmt-ipv4: 10.100.200.44
+      binds: ["./config/upf-m1.yaml:/etc/open5gs/upf.yaml", "/etc/localtime:/etc/localtime:ro"]
+      cmd: bash -c "export OGS_LOG_NO_COLOR=1 && open5gs-upfd"
