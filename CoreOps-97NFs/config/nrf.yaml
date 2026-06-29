@@ -1,0 +1,22 @@
+logger:
+  file:
+    path: /var/log/open5gs/nrf.log
+    level: trace
+
+global:
+  max:
+    ue: 1024
+    peer: 512     
+
+nrf:
+  sbi:
+    server:
+      - address: 10.100.200.10
+        port: 7777
+    client:
+      nrf:
+        - uri: http://10.100.200.10:7777
+  metrics:
+    server:
+      - address: 0.0.0.0
+        port: 9090

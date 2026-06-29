@@ -1,0 +1,16 @@
+logger:
+  file:
+    path: /var/log/open5gs/ausf.log
+    level: trace
+ausf:
+  sbi:
+    server:
+      - address: 10.100.200.73
+        port: 7777
+    client:
+      nrf:
+        - uri: http://10.100.200.10:7777
+  metrics:
+    server:
+      - address: 0.0.0.0
+        port: 9090

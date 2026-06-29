@@ -1,0 +1,58 @@
+global:
+  max:
+    ue: 1024
+    peer: 512
+
+logger:
+  file:
+    path: /var/log/open5gs/amf.log
+    level: trace
+amf:
+  sbi:
+    server:
+      - address: 10.100.200.31
+        port: 7777
+    client:
+      nrf:
+        - uri: http://10.100.200.10:7777
+  ngap:
+    server:
+      - address: 10.100.200.31
+  metrics:
+    server:
+      - address: 0.0.0.0
+        port: 9090
+  guami:
+    - plmn_id:
+        mcc: 999
+        mnc: 70
+      amf_id:
+        region: 2
+        set: 2
+  tai:
+    - plmn_id:
+        mcc: 999
+        mnc: 70
+      tac: 11,12,13,14,15,16,17,18,19,20
+  plmn_support:
+    - plmn_id:
+        mcc: 999
+        mnc: 70
+      s_nssai:
+        - sst: 1
+          sd: "000001"
+        - sst: 2
+          sd: "000002"
+        - sst: 3
+          sd: "000003"
+        - sst: 1
+          sd: "000004"
+  security:
+    integrity_order: [NIA2, NIA1, NIA0]
+    ciphering_order: [NEA0, NEA1, NEA2]
+  amf_name: open5gs-amf-r1-2
+  network_name:
+    full: Open5GS-Bench
+  time:
+    t3512:
+      value: 540

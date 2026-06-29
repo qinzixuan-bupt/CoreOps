@@ -1,0 +1,48 @@
+logger:
+  file:
+    path: /var/log/open5gs/smf.log
+    level: trace
+
+db_uri: mongodb://10.103.238.239/open5gs
+
+smf:
+  sbi:
+    server:
+      - address: 10.100.200.64
+        port: 7777
+    client:
+      nrf:
+        - uri: http://10.100.200.10:7777
+
+  gtpc:
+    server:
+      - address: 10.100.200.64
+
+  gtpu:                           
+    server:
+      - address: 10.100.200.64
+
+  pfcp:
+    server:
+      - address: 10.100.200.64
+    client:
+      upf:
+        - address: 10.100.200.114
+          dnn: miot
+
+  metrics:
+    server:
+      - address: 0.0.0.0
+        port: 9090
+
+  session:
+    - subnet: 10.45.15.0/16
+      gateway: 10.45.15.1
+      dnn: miot
+      s_nssai:
+        - sst: 3
+          sd: "000003"
+
+  dns:
+    - 8.8.8.8
+    - 8.8.4.4

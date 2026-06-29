@@ -1,0 +1,18 @@
+logger:
+  file:
+    path: /var/log/open5gs/udr.log
+    level: trace
+db_uri: mongodb://10.103.238.239/open5gs
+
+udr:
+  sbi:
+    server:
+      - address: 10.100.200.19
+        port: 7777
+    client:
+      nrf:
+        - uri: http://10.100.200.10:7777
+  metrics:
+    server:
+      - address: 0.0.0.0
+        port: 9090

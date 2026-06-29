@@ -1,0 +1,26 @@
+logger:
+  file:
+    path: /var/log/open5gs/upf.log
+    level: trace
+
+upf:
+  pfcp:
+    server:
+      - address: 10.100.200.110
+    client:
+      smf:
+        - address: 10.100.200.60
+
+  gtpu:
+    server:
+      - address: 10.100.200.110
+
+  metrics:
+    server:
+      - address: 0.0.0.0
+        port: 9090
+
+  session:
+    - subnet: 10.45.11.0/24
+      gateway: 10.45.11.1
+      dnn: miot
